@@ -1,3 +1,5 @@
+import { productDetailsTemplate } from './productDetailsTemplate.mjs';
+
 import { setLocalStorage, getLocalStorage } from './utils.mjs';
 
 export default class ProductDetails {
@@ -40,3 +42,20 @@ export default class ProductDetails {
 
   document.getElementById("addToCart").dataset.id = product.Id;
 }
+
+const products = [
+  {
+    product:"880RR",
+    name: "Marmot Ajax Tent",
+    price: 199.99,
+    discount: true,
+    image: "images/tents/marmot-ajax-tent-3-person-3-seaon-in-pale-pumpkin-terracotta~p~880ee_01~320.jpg"
+  },
+  {
+    product:"985RF",
+    name: "Ajax Tent",
+    price: 199.99,
+    discount: true,
+    image: "images/tents/the-north-face-talus-tent-4-person-3-season-in-golden-oak-saffron-yellow~p~985rf_01~320.jpg"
+  }
+];

@@ -8,9 +8,11 @@
  * @param {boolean} clear - Whether to clear the parent element before inserting (default: false)
  */
 export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear) {
+  if (clear && Array.isArray(list) && list.length > 0) {
     parentElement.innerHTML = '';
   }
+
+  if (!list || list.length === 0) return;
 
   const htmlString = list.map(templateFn).join('');
   parentElement.insertAdjacentHTML(position, htmlString);
