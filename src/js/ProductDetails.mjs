@@ -24,11 +24,11 @@ export default class ProductDetails {
   }
 
   renderProductDetails() {
-    productDetailsTemplate(this.product);
+    renderProductDetailsUI(this.product);
   }
 }
 
-    function productDetailsTemplate(product) {
+      function renderProductDetailsUI(product) {
   document.querySelector("h2").textContent = product.Brand.Name;
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 

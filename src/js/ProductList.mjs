@@ -48,7 +48,7 @@ export default class ProductList {
       }
       
         list = list.map(product => {
-          const discountKey = Object.keys(this.discounts).find(key => product.Name.includes(key));
+          const discountKey = Object.keys(this.discounts).find(key => product.Name.toLowerCase().includes(key.toLowerCase()));
 if (discountKey) {
   product.discount = this.discounts[discountKey];
 }

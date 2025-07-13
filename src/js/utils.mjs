@@ -17,3 +17,19 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   const htmlString = list.map(templateFn).join('');
   parentElement.insertAdjacentHTML(position, htmlString);
 }
+
+export function getLocalStorage(key) {
+  return JSON.parse(localStorage.getItem(key, value));
+}
+
+export function setLocalStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+export function getParam(key) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(key);
+}
+
+
+
