@@ -1,5 +1,11 @@
+// src/js/main.js
+import { loadHeaderFooter } from './utils.mjs';
+
+
 import ProductData from "./ProductData.mjs";
 import ProductList from "./ProductList.mjs";
+
+loadHeaderFooter();
 
 console.log("main.js loaded");
 
@@ -17,3 +23,4 @@ const productList = new ProductList("Tents", dataSource, element, discounts);
 
 console.log("Calling productList.init....");
 productList.init();
+
