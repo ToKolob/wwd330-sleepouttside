@@ -1,0 +1,5 @@
+/cart/*
+  Cache-Control: no-cache
+
+/checkout/*
+  Cache-Control: no-cache
