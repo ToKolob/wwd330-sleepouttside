@@ -5,3 +5,5 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('Cart items:', cart);
   // TODO: Render cart to DOM
 });
+
+// Triggering Netlify deploy manually
