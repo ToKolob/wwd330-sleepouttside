@@ -54,7 +54,4 @@ export async function loadHeaderFooter() {
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
 }
-export function getParam(key) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
-}
+
