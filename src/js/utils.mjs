@@ -19,7 +19,7 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
 }
 
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key, value));
+  return JSON.parse(localStorage.getItem(key));
 }
 
 export function setLocalStorage(key, data) {
@@ -47,16 +47,8 @@ export async function loadHeaderFooter() {
   const headerTemplate = await loadTemplate("../partials/header.html");
   const footerTemplate = await loadTemplate("../partials/footer.html");
 
-  //const headerElement = document.querySelector("#main-header");
-  //const footerElement = document.querySelector("#main-footer");
-
-  //renderWithTemplate(headerTemplate, headerElement);
-  //renderWithTemplate(footerTemplate, footerElement);
-
+  
   renderWithTemplate(headerTemplate, document.querySelector("#main-header"));
   renderWithTemplate(footerTemplate, document.querySelector("#main-footer"));
 }
-//export function getParam(key) {
-//  const urlParams = new URLSearchParams(window.location.search);
-//  return urlParams.get(key);
-//}
+
