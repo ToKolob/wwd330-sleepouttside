@@ -19,7 +19,7 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
 }
 
 export function getLocalStorage(key) {
-  return JSON.parse(localStorage.getItem(key, value));
+  return JSON.parse(localStorage.getItem(key));
 }
 
 export function setLocalStorage(key, data) {
@@ -33,9 +33,8 @@ export function getParam(key) {
 
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
-  if (callback) {
-    callback(data);
-  }
+  if (callback) callback(data);
+  
 }
 
 export async function loadTemplate(path) {
@@ -48,10 +47,12 @@ export async function loadHeaderFooter() {
   const headerTemplate = await loadTemplate("../partials/header.html");
   const footerTemplate = await loadTemplate("../partials/footer.html");
 
-  const headerElement = document.querySelector("#main-header");
-  const footerElement = document.querySelector("#main-footer");
+  
+  renderWithTemplate(headerTemplate, document.querySelector("#main-header"));
+  renderWithTemplate(footerTemplate, document.querySelector("#main-footer"));
 
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
+
 }
 
