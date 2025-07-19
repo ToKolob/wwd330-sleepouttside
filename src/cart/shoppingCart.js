@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // TODO: Render cart to DOM
 });
 
+// Triggering Netlify deploy manually
 
 
 // Force Netlify preview rebuild on correct branch
