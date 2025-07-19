@@ -1,4 +1,4 @@
-/** ✅ Render a list using a template function */
+/** Render a list using a template function */
 export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
   if (clear) parentElement.innerHTML = '';
   if (!Array.isArray(list) || list.length === 0) return;
@@ -6,7 +6,7 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   parentElement.insertAdjacentHTML(position, htmlString);
 }
 
-/** ✅ LocalStorage: Get and Set with fallback */
+/** LocalStorage: Get and Set with fallback */
 export function getLocalStorage(key) {
   try {
     const item = localStorage.getItem(key);
@@ -25,19 +25,19 @@ export function setLocalStorage(key, data) {
   }
 }
 
-/** ✅ Get query parameter from URL */
+/** Get query parameter from URL */
 export function getParam(key) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(key);
 }
 
-/** ✅ Render raw HTML template into element */
+/** Render raw HTML template into element */
 export function renderWithTemplate(template, parentElement, callback) {
   parentElement.innerHTML = template;
   if (typeof callback === "function") callback();
 }
 
-/** ✅ Load HTML partial from file (Vite-compatible) */
+/** Load HTML partial from file (Vite-compatible) */
 export async function loadTemplate(path) {
   try {
     const res = await fetch(path); // For Vite: use "/partials/xxx.html"
@@ -49,7 +49,7 @@ export async function loadTemplate(path) {
   }
 }
 
-/** ✅ Load header/footer partials into page */
+/** Load header/footer partials into page */
 export async function loadHeaderFooter() {
   try {
     const headerTemplate = await loadTemplate('/partials/header.html');
@@ -65,7 +65,7 @@ export async function loadHeaderFooter() {
   }
 }
 
-/** ✅ Debounce helper */
+/** Debounce helper */
 export function debounce(fn, delay = 300) {
   let timeout;
   return (...args) => {
@@ -74,7 +74,7 @@ export function debounce(fn, delay = 300) {
   };
 }
 
-/** ✨ Keyword highlighting utility */
+/** Keyword highlighting utility */
 export function highlight(text, keyword) {
   if (!keyword || !text) return text;
   const safeKeyword = keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'); // Escape special chars

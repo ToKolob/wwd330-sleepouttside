@@ -2,10 +2,10 @@ import ProductList from './ProductList.mjs';
 import ProductData from './ProductData.mjs';
 import { loadHeaderFooter, getParam } from './utils.mjs';
 
-// 🧩 Load header and footer dynamically
+// Load header and footer dynamically
 loadHeaderFooter();
 
-// 📦 DOM elements
+// DOM elements
 const productId = getParam('id');
 const category = getParam('category'); // ⭐ New: allows category-based filtering
 const listElement = document.querySelector('.product-list');
@@ -13,20 +13,20 @@ const productSection = document.querySelector('.products');
 const detailSection = document.getElementById('product-detail');
 const backBtn = document.getElementById('back-to-list');
 
-// 🌐 Load mock data (change false to use real API)
+// Load mock data (change false to use real API)
 const dataSource = new ProductData(true);
 
-// 🧠 Instantiate the product list — pass category if available
+// Instantiate the product list — pass category if available
 const productList = new ProductList(category, dataSource, listElement);
 
-// 🔙 Handle back-to-list button for detail page
+// Handle back-to-list button for detail page
 if (backBtn) {
   backBtn.addEventListener('click', () => {
     window.location.href = 'index.html';
   });
 }
 
-// 📄 Load either a single product detail or the full product list
+// Load either a single product detail or the full product list
 if (productId) {
   productSection.style.display = 'none';
   detailSection.style.display = 'block';

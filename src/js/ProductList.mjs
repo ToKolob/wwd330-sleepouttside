@@ -1,6 +1,6 @@
 import { renderListWithTemplate, debounce, highlight } from "./utils.mjs";
 
-// 💡 Product card renderer
+// Product card renderer
 function productCardTemplate(product) {
   const discount = product.discount || 0;
   const hasDiscount = discount > 0;
@@ -34,7 +34,7 @@ function productCardTemplate(product) {
   `;
 }
 
-// 🌐 Get category from URL if applicable
+// Get category from URL if applicable
 function getCategoryFromURL() {
   const params = new URLSearchParams(window.location.search);
   return params.get("category");
@@ -122,12 +122,12 @@ export default class ProductList {
       this.showSuggestions(query, input, suggestionBox, triggerSearch);
     });
 
-    // ⌨️ Input listeners
+    // Input listeners
     input?.addEventListener("input", triggerSearch);
     minInput?.addEventListener("input", triggerSearch);
     maxInput?.addEventListener("input", triggerSearch);
 
-    // 🏷️ Tag filtering
+    // Tag filtering
     tagButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         activeTag = btn.dataset.tag.toLowerCase();

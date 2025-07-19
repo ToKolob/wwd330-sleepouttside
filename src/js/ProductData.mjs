@@ -8,7 +8,7 @@ function convertToJson(res) {
   }
 }
 
-// 🧪 Mock Product List (Tents only for now)
+// Mock Product List (Tents only for now)
 export const mockProducts = [
   {
     Id: "880RR",
