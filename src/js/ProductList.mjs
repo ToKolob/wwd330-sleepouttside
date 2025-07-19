@@ -12,8 +12,8 @@ function productCardTemplate(product) {
 
   return `
     <li class="product-card">
-      <a href="product-detail.html?id=${product.Id}">
-        <img src="${product.Image || '/images/default.jpg'}" alt="${product.Name}">
+      <a href="/product_pages/product-detail.html?id=${product.Id}">
+        <img src="${product.PrimaryMedium || '/images/default.jpg'}" alt="${product.Name}">
         <h3 class="card__brand">${product.Brand?.Name || 'Unknown Brand'}</h3>
         <h2 class="card__name">${product.Name}</h2>
         ${hasDiscount ? `<p class="discount-flag">${discount * 100}% OFF</p>` : ""}
@@ -29,6 +29,15 @@ function productCardTemplate(product) {
   `;
 }
 
+// Grab category from URL
+function getCategoryFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get("category");
+}
+
+const category = getCategoryFromURL();
+
+// ProductList Class
 export default class ProductList {
   constructor(category, dataSource, listElement, discounts = {}) {
     this.category = category;
@@ -46,22 +55,37 @@ export default class ProductList {
         this.listElement.innerHTML = "<p>No products found.</p>";
         return;
       }
-      
-        list = list.map(product => {
-          const discountKey = Object.keys(this.discounts).find(key => product.Name.toLowerCase().includes(key.toLowerCase()));
-if (discountKey) {
-  product.discount = this.discounts[discountKey];
-}
-      return product;
-        });
 
-        this.renderList(list);
-      } catch (err) {
+      // Filter by category
+      if (this.category) {
+        list = list.filter(
+          (product) =>
+            product.Category?.toLowerCase() === this.category.toLowerCase()
+        );
+      }
+
+      // Apply discounts if available
+      list = list.map((product) => {
+        const discountKey = Object.keys(this.discounts).find((key) =>
+          product.Name.toLowerCase().includes(key.toLowerCase())
+        );
+        if (discountKey) {
+          product.discount = this.discounts[discountKey];
+        }
+        return product;
+      });
+
+      this.renderList(list);
+    } catch (err) {
       console.error("Failed to load product data:", err);
       this.listElement.innerHTML = "<p>Error loading product list.</p>";
     }
   }
+
   renderList(list) {
     renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
   }
 }
+
+// Optional update page header based on category
+document.querySelector("h2").textContent = `Products: ${category}`;
