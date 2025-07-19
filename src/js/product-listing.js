@@ -2,31 +2,29 @@ import ProductData from './ProductData.mjs';
 import ProductList from './ProductList.mjs';
 import { loadHeaderFooter, getParam } from './utils.mjs';
 
-// Load the common site header and footer
+// Load header and footer into the page
 loadHeaderFooter();
 
-// Get the category from the URL parameter (e.g., ?category=tents)
+// Get category from URL, if present
 const category = getParam('category');
 
-// Capitalize the category name (optional for styling)
+// Optional: Capitalize for display
 function capitalize(text) {
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : 'All';
 }
 
-// Update the page title dynamically
+// Update page heading
 const heading = document.querySelector('.product-title');
 if (heading) {
   heading.textContent = `Top Products: ${capitalize(category)}`;
 }
 
-// Create a ProductData instance to fetch products
-const dataSource = new ProductData();
+// Use mock data during development (set to true to enable)
+const dataSource = new ProductData(true); // 👈 true = use mockProducts
 
-// Select the element to render the product list into
+// Select list container
 const listElement = document.querySelector('.product-list');
 
-// Create and initialize the ProductList
+// Initialize product list and render + attach search
 const myList = new ProductList(category, dataSource, listElement);
-
-// Show the filtered product list
 myList.init();
