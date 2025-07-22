@@ -54,6 +54,11 @@ if (productId) {
   productList.init(); // ✅ Loads product list and search features
 }
 
+if (document.querySelector('.checkout')) {
+    const checkout = new CheckoutProcess('so-cart', '.checkout-container');
+    checkout.init();
+}
+
 // 🌙 Dark mode toggle after header loads
 document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('theme-toggle');
