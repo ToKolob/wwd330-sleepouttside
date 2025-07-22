@@ -10,6 +10,8 @@ export default class ProductDetails {
   }
 
   async init() {
+    console.log(`Initializing ProductDetails for product ID: ${this.productId}`);
+    
     this.product = await this.dataSource.findProductById(this.productId);
     this.renderProductDetails();
 
@@ -24,6 +26,8 @@ export default class ProductDetails {
   }
 
   renderProductDetails() {
+    console.log("Rendering product details...");
+    
     renderProductDetailsUI(this.product);
   }
 }
