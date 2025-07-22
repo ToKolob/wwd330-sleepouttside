@@ -18,7 +18,7 @@ export default class ShoppingCart {
     this.listElement = document.querySelector(listElementSelector);
     this.storageKey = storageKey;
 
-    console.log("Cart.js is now wired up and ready!");
+    console.log("Cart.js is now wired up and ready         !");
     console.log(`ShoppingCart initialized with storage key: ${this.storageKey}`);
     console.log(`List element found: ${this.listElement} `);
     
