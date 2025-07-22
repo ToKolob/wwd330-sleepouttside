@@ -15,7 +15,7 @@ function productCardTemplate(product) {
 
   return `
     <li class="product-card">
-      <a href="/product_pages/product-detail.html?id=${product.Id}">
+      <a href="/product-detail.html?id=${product.Id}">
         <img src="${product.PrimaryMedium || '/images/default.jpg'}"
              alt="${product.Name}"
              onerror="this.src='/images/default.jpg';" />
