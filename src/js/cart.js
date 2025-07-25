@@ -1,5 +1,6 @@
 import { loadHeaderFooter, getLocalStorage, setLocalStorage } from "../js/utils.mjs";
 
+
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", renderCartContents);
