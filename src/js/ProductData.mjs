@@ -11,7 +11,6 @@ function convertToJson(res) {
 export default class ProductData {
   constructor() {}
 
-  // Fetch product list by category using the API
   async getData(category) {
     try {
       const response = await fetch(`${baseURL}products/search/${category}`);
@@ -23,11 +22,11 @@ export default class ProductData {
     }
   }
 
-  // Fetch product by ID directly from API — more efficient!
   async findProductById(id) {
     try {
       const response = await fetch(`${baseURL}product/${id}`);
       const data = await convertToJson(response);
+      console.log(data.Result); 
       return data.Result;
     } catch (err) {
       console.error(`Failed to fetch product by ID: ${id}`, err);

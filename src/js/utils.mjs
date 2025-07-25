@@ -1,58 +1,70 @@
-/**
- * Renders a list of items to the DOM using a provided template function.
- * 
- * @param {Function} templateFn - Function that returns an HTML string for each item
- * @param {HTMLElement} parentElement - The element where the list should be inserted
- * @param {Array} list - Array of data items to render
- * @param {string} position - Position to insert the HTML (default: "afterbegin")
- * @param {boolean} clear - Whether to clear the parent element before inserting (default: false)
- */
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear && Array.isArray(list) && list.length > 0) {
-    parentElement.innerHTML = '';
-  }
-
-  if (!list || list.length === 0) return;
-
-  const htmlString = list.map(templateFn).join('');
-  parentElement.insertAdjacentHTML(position, htmlString);
+// Element selector shortcut
+export function qs(selector, parent = document) {
+  return parent.querySelector(selector);
 }
 
+// Add click and touch support
+export function setClick(selector, callback) {
+  const element = qs(selector);
+  if (!element) return;
+
+  element.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    callback();
+  });
+  element.addEventListener("click", callback);
+}
+
+// Get value from localStorage
 export function getLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
 
+// Save value to localStorage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
+// Get a parameter from the URL
 export function getParam(key) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(key);
 }
 
+// Render multiple items using a template
+export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+  if (clear) parentElement.innerHTML = "";
+  if (!list || list.length === 0) return;
+
+  const htmlString = list.map(templateFn).join("");
+  parentElement.insertAdjacentHTML(position, htmlString);
+}
+
+// Render a single item/template with optional callback
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
   if (callback) callback(data);
-  
 }
 
+// Load an external HTML template
 export async function loadTemplate(path) {
   const res = await fetch(path);
-  const template = await res.text();
-  return template;
+  if (!res.ok) throw new Error(`Template not found: ${path}`);
+  return await res.text();
 }
 
+// Load header and footer templates
 export async function loadHeaderFooter() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
-  const footerTemplate = await loadTemplate("../partials/footer.html");
+  try {
+    const headerTemplate = await loadTemplate("../partials/header.html");
+    const footerTemplate = await loadTemplate("../partials/footer.html");
 
-  
-  renderWithTemplate(headerTemplate, document.querySelector("#main-header"));
-  renderWithTemplate(footerTemplate, document.querySelector("#main-footer"));
+    const headerElement = document.querySelector("#main-header");
+    const footerElement = document.querySelector("#main-footer");
 
-  renderWithTemplate(headerTemplate, headerElement);
-  renderWithTemplate(footerTemplate, footerElement);
-
+    renderWithTemplate(headerTemplate, headerElement);
+    renderWithTemplate(footerTemplate, footerElement);
+  } catch (err) {
+    console.error("Error loading header/footer templates:", err);
+  }
 }
-

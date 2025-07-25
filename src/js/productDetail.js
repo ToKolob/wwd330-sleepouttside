@@ -1,38 +1,42 @@
 import ProductData from "./ProductData.mjs";
 import { getParam, loadHeaderFooter } from "./utils.mjs";
 
+// Load site header and footer
 loadHeaderFooter();
 
-// 🔎 Get product ID from URL
+// 🔍 Get product ID from URL
 const productId = getParam("id");
 
-// 📦 Create an instance of ProductData
+// 📦 Create a ProductData instance
 const dataSource = new ProductData();
 
-// 🧩 Fetch and render product details
+// 🧩 Render product details
 async function renderProductDetails() {
   try {
     const product = await dataSource.findProductById(productId);
 
     if (!product) {
-      document.querySelector(".product-detail").innerHTML = "<p>Product not found.</p>";
+      document.querySelector(".product-detail").innerHTML =
+        "<p>Product not found.</p>";
       return;
     }
 
-    // 🖼️ Use PrimaryLarge image or fallback
     const imageURL = product.PrimaryLarge || "/images/default.jpg";
+    const brandName = product.Brand?.Name || "Unknown";
+    const description = product.Description || "No description available.";
+    const price = product.FinalPrice ? `₹${product.FinalPrice}` : "Price not available";
 
-    // 🛠️ Inject product data into the detail section
     document.querySelector(".product-detail").innerHTML = `
       <h2>${product.Name}</h2>
       <img src="${imageURL}" alt="${product.Name}" />
-      <p><strong>Brand:</strong> ${product.Brand?.Name || "Unknown"}</p>
-      <p><strong>Price:</strong> ₹${product.FinalPrice}</p>
-      <p>${product.Description || "No description available."}</p>
+      <p><strong>Brand:</strong> ${brandName}</p>
+      <p><strong>Price:</strong> ${price}</p>
+      <p>${description}</p>
     `;
   } catch (error) {
     console.error("Error fetching product details:", error);
-    document.querySelector(".product-detail").innerHTML = "<p>Error loading product.</p>";
+    document.querySelector(".product-detail").innerHTML =
+      "<p>Error loading product.</p>";
   }
 }
 

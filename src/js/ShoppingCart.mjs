@@ -1,3 +1,4 @@
+// src/js/ShoppingCart.mjs
 import { getLocalStorage, renderListWithTemplate, loadTemplate } from '../../utils.mjs';
 
 function cartItemTemplate(item) {
@@ -14,19 +15,21 @@ function cartItemTemplate(item) {
 }
 
 export default class ShoppingCart {
-  constructor(listElementSelector, storageKey) {
+  constructor(listElementSelector, storageKey = 'so-cart') {
     this.listElement = document.querySelector(listElementSelector);
     this.storageKey = storageKey;
   }
 
   async init() {
     const cartItems = getLocalStorage(this.storageKey) || [];
+    console.log('Cart loaded:', cartItems);
+
     if (cartItems.length === 0) {
       this.listElement.innerHTML = `<p>Your cart is empty.</p>`;
       return;
     }
 
-    // Optionally load a wrapper template (not required for single items)
+    // Uncomment this if you want to use an external template file
     // const cartTemplate = await loadTemplate('../partials/cartItem.html');
 
     renderListWithTemplate(cartItemTemplate, this.listElement, cartItems, 'afterbegin', true);
