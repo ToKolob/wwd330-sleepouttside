@@ -12,6 +12,7 @@ export default class ProductDetails {
     try {
       this.product = await this.dataSource.findProductById(this.productId);
       this.renderProductDetails();
+
       document.getElementById('add-to-cart') // Match HTML ID
         .addEventListener('click', this.addProductToCart.bind(this));
     } catch (err) {
@@ -28,11 +29,8 @@ export default class ProductDetails {
   }
 
   renderProductDetails() {
-    productDetailsTemplate(this.product); 
-  }
-
+    productDetailsTemplate(this.product);
     console.log("Rendering product details...");
-    
     renderProductDetailsUI(this.product);
   }
 }
