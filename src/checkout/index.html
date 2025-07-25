@@ -7,17 +7,15 @@
     <link rel="stylesheet" href="../css/style.css" />
     <script src="../js/checkout.js" type="module"></script>
   </head>
-
   <body>
     <header class="divider" id="main-header">
       <div class="logo">
         <img src="../images/noun_Tent_2517.svg" alt="Tent logo" />
         <a href="../index.html">Sleep <span class="highlight">Outside</span></a>
       </div>
-
       <div class="cart">
         <a href="../cart/">
-          <!-- Your SVG icon here -->
+          <!-- Your SVG icon can be added here -->
         </a>
       </div>
     </header>
@@ -32,6 +30,8 @@
 
       <section class="checkout-form">
         <form name="checkout">
+          <input type="hidden" name="orderDate" id="orderDate" />
+
           <fieldset>
             <legend>Contact Information</legend>
             <div class="checkout__name">
@@ -76,8 +76,8 @@
             <div class="order__summary">
               <div>Items</div> <div id="numberItems"></div>
               <div>Subtotal</div> <div id="cartTotal"></div>
-              <div>Shipping</div> <div id="shipping"></div>
               <div>Tax</div> <div id="tax"></div>
+              <div>Shipping</div> <div id="shipping"></div>
               <div>Total</div> <div id="total"></div>
             </div>
           </fieldset>
