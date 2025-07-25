@@ -6,6 +6,8 @@ loadHeaderFooter();
 const cart = new ShoppingCart('#cart-list', 'so-cart');
 cart.init();
 
+console.log("Cart.js is now wired up and ready!");
+
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const htmlItems = cartItems.map((item) => cartItemTemplate(item));
