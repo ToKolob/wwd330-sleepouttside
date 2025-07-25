@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sleep Outside | Product Listing</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <script type="module" src="/js/product-listing.js"></script>
+</head>
+
+<body>
+  <header id="main-header"></header>
+
+  <main>
+    <h1>Top Products</h1>
+    
+
+    <div class="product-search">
+      <input type="text" id="searchInput" placeholder="Search products..." />
+      <ul id="search-suggestions" class="suggestion-list"></ul>
+    </div>
+
+    <div class="tag-filter keyword-container">
+      <button class="tag" data-tag="2-person">2-Person</button>
+      <button class="tag" data-tag="ultralight">Ultralight</button>
+      <button class="tag" data-tag="4-season">4-Season</button>
+    </div>
+
+    <div class="price-filter">
+      <label>Min ₹<input type="number" id="minPrice" /></label>
+      <label>Max ₹<input type="number" id="maxPrice" /></label>
+    </div>
+
+    <ul class="product-list">
+      <!-- Products rendered here -->
+    </ul>
+
+    <section id="product-detail" class="product-detail hidden">
+      <div class="product-card--detail">
+        <img id="detail-image" alt="Product Image" />
+        <div class="detail-info">
+          <h2 id="detail-name"></h2>
+          <p id="detail-brand"></p>
+          <p id="detail-price"></p>
+          <p id="detail-category"></p>
+          <button id="back-to-list">⬅ Back to Products</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="main-footer"></footer>
+</body>
+</html>
