@@ -104,3 +104,27 @@ export default class CheckoutProcess {
         }
     }
 }
+
+async checkout() {
+    try {
+        const order = await this.prepareOrder();
+        const response = await checkoutService.checkout(order);
+        // Clear cart and redirect on success
+        localStorage.removeItem('so-cart');
+        window.location.href = '/checkout/success.html';
+    } catch(err) {
+        // Handle different types of errors
+        if (err.name === 'servicesError') {
+            // Display validation errors from server
+            const errors = err.message.errors;
+            let errorMessage = 'Please fix the following errors:<br>';
+            for (const [field, message] of Object.entries(errors)) {
+                errorMessage += `${field}: ${message}<br>`;
+            }
+            alertMessage(errorMessage);
+        } else {
+            // Generic error
+            alertMessage(`Checkout failed: ${err.message}`);
+        }
+    }
+}

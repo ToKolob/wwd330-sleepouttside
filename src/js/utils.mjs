@@ -81,3 +81,35 @@ export function highlight(text, keyword) {
   const regex = new RegExp(`(${safeKeyword})`, "gi");
   return text.replace(regex, "<mark>$1</mark>");
 }
+
+export function alertMessage(message, scroll = true) {
+    // Remove any existing alerts
+    const existingAlert = document.querySelector('.alert');
+    if (existingAlert) {
+        existingAlert.remove();
+    }
+
+    // Create new alert
+    const alert = document.createElement('div');
+    alert.classList.add('alert');
+    alert.innerHTML = `
+        <p>${message}</p>
+        <span class="close-btn">&times;</span>
+    `;
+
+    // Add click handler for close button
+    alert.addEventListener('click', function(e) {
+        if (e.target.classList.contains('close-btn')) {
+            main.removeChild(this);
+        }
+    });
+
+    // Add to main
+    const main = document.querySelector('main');
+    main.prepend(alert);
+
+    // Scroll to top if requested
+    if (scroll) {
+        window.scrollTo(0, 0);
+    }
+}

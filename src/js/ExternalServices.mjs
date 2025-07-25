@@ -35,3 +35,12 @@ export default class ExternalServices {
         return response.json();
     }
 }
+
+async function convertToJson(res) {
+    const jsonResponse = await res.json();
+    if (res.ok) {
+        return jsonResponse;
+    } else {
+        throw { name: 'servicesError', message: jsonResponse };
+    }
+}
