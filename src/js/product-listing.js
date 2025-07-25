@@ -46,8 +46,11 @@ import { loadHeaderFooter, getParam } from './utils.mjs';
 
   } catch (error) {
     console.error('Error loading product listing:', error);
-    document.querySelector('.product-list')?.innerHTML =
-      "<p>Unable to load products. Please try again later.</p>";
+    const targetElement = document.querySelector('.product-list');
+if (targetElement) {
+  targetElement.innerHTML = "<p>Unable to load products. Please try again later.</p>";
+}
+
   }
 })();
 
