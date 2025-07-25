@@ -1,7 +1,6 @@
 import { productDetailsTemplate } from './productDetailsTemplate.mjs';
 import { setLocalStorage, getLocalStorage } from './utils.mjs';
 
-// Modular class to handle individual product detail rendering and cart logic
 export default class ProductDetails {
   constructor(productId, dataSource) {
     this.productId = productId;
@@ -10,40 +9,28 @@ export default class ProductDetails {
   }
 
   async init() {
-    console.log(`Initializing ProductDetails for product ID: ${this.productId}`);
-    
-    this.product = await this.dataSource.findProductById(this.productId);
-    this.renderProductDetails();
+    try {
+      this.product = await this.dataSource.findProductById(this.productId);
+      this.renderProductDetails();
 
-    document.getElementById('addToCart')
-      .addEventListener('click', this.addProductToCart.bind(this)); 
+      document.getElementById('add-to-cart') // Match HTML ID
+        .addEventListener('click', this.addProductToCart.bind(this));
+    } catch (err) {
+      console.error('Error loading product details:', err);
+      document.querySelector('main').innerHTML = `<p>Failed to load product details. Please try again later.</p>`;
+    }
   }
 
   addProductToCart() {
     const cartContents = getLocalStorage('so-cart') || [];
-    cartContents.push(this.product);
+    const alreadyInCart = cartContents.find(item => item.Id === this.product.Id);
+    if (!alreadyInCart) cartContents.push(this.product);
     setLocalStorage('so-cart', cartContents);
   }
 
   renderProductDetails() {
+    productDetailsTemplate(this.product);
     console.log("Rendering product details...");
-    
     renderProductDetailsUI(this.product);
   }
-}
-
-// UI rendering function
-function renderProductDetailsUI(product) {
-  document.querySelector("h2").textContent = product.Brand?.Name || "Brand not available";
-  document.querySelector("h3").textContent = product.NameWithoutBrand || product.Name;
-
-  const productImage = document.getElementById("productImage");
-  productImage.src = product.PrimaryLarge || "/images/default.jpg"; 
-  productImage.alt = product.NameWithoutBrand || "Product image";
-
-  document.getElementById("productPrice").textContent = `₹${product.FinalPrice}`;
-  document.getElementById("productColor").textContent = product.Colors?.[0]?.ColorName || "N/A";
-  document.getElementById("productDesc").innerHTML = product.DescriptionHtmlSimple || "No description available.";
-
-  document.getElementById("addToCart").dataset.id = product.Id;
 }

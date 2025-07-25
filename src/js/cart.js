@@ -1,11 +1,8 @@
 import { loadHeaderFooter, getLocalStorage, setLocalStorage } from "../js/utils.mjs";
 
-
 loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", renderCartContents);
-
-console.log("Cart.js is now wired up and ready!");
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -32,7 +29,7 @@ function renderCartContents() {
 function cartItemTemplate(item, index) {
   const imageSrc = item.Image || "images/default.png";
   const quantity = item.quantity || 1;
-  const total = item.FinalPrice * quantity;
+  const total = (item.FinalPrice || item.price || item.originalPrice) * quantity;
 
   return `
     <li class="cart-card divider" data-index="${index}">
@@ -58,6 +55,25 @@ function cartItemTemplate(item, index) {
   `;
 }
 
+function updateQuantity(event) {
+  const input = event.target;
+  const newQty = parseInt(input.value);
+  const cardElement = input.closest("li.cart-card");
+  const index = cardElement.dataset.index;
+  const cartItems = getLocalStorage("so-cart");
 
-renderCartContents();
+  if (newQty < 1 || isNaN(newQty)) {
+    input.classList.add("input-error");
+    return;
+  } else {
+    input.classList.remove("input-error");
+  }
 
+  // Update quantity in localStorage
+  cartItems[index].quantity = newQty;
+  setLocalStorage("so-cart", cartItems);
+
+  // Update total price visually
+  const totalElement = cardElement.querySelector(".item-total");
+  totalElement.textContent = (cartItems[index].FinalPrice * newQty).toFixed(2);
+}

@@ -8,7 +8,7 @@ function convertToJson(res) {
   }
 }
 
-// Mock Product List (Tents only for now)
+// 🎯 Mock Product List (Tents only for now)
 export const mockProducts = [
   {
     Id: "880RR",
@@ -58,36 +58,42 @@ export default class ProductData {
   }
 
   /**
-   * Get a list of products — all or by category
+   * 🔄 Get a list of products — all or by category
    * @param {string} category optional
    */
   async getData(category = null) {
     if (this.useMock) {
       if (category) {
-        return mockProducts.filter(p =>
-          p.Category?.toLowerCase() === category.toLowerCase()
+        return mockProducts.filter(
+          (p) => p.Category?.toLowerCase() === category.toLowerCase()
         );
       } else {
-        return mockProducts; // Show all mock products
+        return mockProducts;
       }
     }
 
     try {
       const endpoint = category
         ? `${baseURL}products/search/${category}`
-        : `${baseURL}products`; // fallback if no category
+        : `${baseURL}products`;
 
       const response = await fetch(endpoint);
       const data = await convertToJson(response);
       return data.Result;
     } catch (err) {
-      console.error(`Failed to fetch product list${category ? ` for category: ${category}` : ''}`, err);
+      console.error(
+        `Failed to fetch product list${
+          category ? ` for category: ${category}` : ""
+        }`,
+        err
+      );
       throw err;
     }
   }
 
   /**
-   * Get product details by ID
+   * 🔍 Find a specific product by ID
+   * @param {string} id
    */
   async findProductById(id) {
     if (this.useMock) {
@@ -97,6 +103,7 @@ export default class ProductData {
     try {
       const response = await fetch(`${baseURL}product/${id}`);
       const data = await convertToJson(response);
+      console.log(data.Result);
       return data.Result;
     } catch (err) {
       console.error(`Failed to fetch product by ID: ${id}`, err);

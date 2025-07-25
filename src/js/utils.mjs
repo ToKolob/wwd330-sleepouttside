@@ -1,83 +1,76 @@
-/** Render a list using a template function */
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear) parentElement.innerHTML = '';
-  if (!Array.isArray(list) || list.length === 0) return;
-  const htmlString = list.map(templateFn).join('');
-  parentElement.insertAdjacentHTML(position, htmlString);
+// Query Selector Utility
+export function qs(selector, parent = document) {
+  return parent.querySelector(selector);
 }
 
-/** LocalStorage: Get and Set with fallback */
+// Add Click & Touch Event Support
+export function setClick(selector, callback) {
+  const element = qs(selector);
+  if (!element) return;
+
+  element.addEventListener("touchend", (event) => {
+    event.preventDefault();
+    callback();
+  });
+  element.addEventListener("click", callback);
+}
+
+// Local Storage Helpers
 export function getLocalStorage(key) {
-  try {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : null;
-  } catch (e) {
-    console.warn(`LocalStorage read failed for key: ${key}`, e);
-    return null;
-  }
+  return JSON.parse(localStorage.getItem(key));
 }
 
 export function setLocalStorage(key, data) {
-  try {
-    localStorage.setItem(key, JSON.stringify(data));
-  } catch (e) {
-    console.warn(`LocalStorage write failed for key: ${key}`, e);
-  }
+  localStorage.setItem(key, JSON.stringify(data));
 }
 
-/** Get query parameter from URL */
+// Get URL Parameter
 export function getParam(key) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(key);
 }
 
-/** Render raw HTML template into element */
-export function renderWithTemplate(template, parentElement, callback) {
+// Render a List Using Template
+export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+  if (clear) parentElement.innerHTML = "";
+  if (!list || list.length === 0) return;
+
+  const htmlString = list.map(templateFn).join("");
+  parentElement.insertAdjacentHTML(position, htmlString);
+}
+
+// Render Static Template with Callback
+export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
-  if (typeof callback === "function") callback();
+  if (callback) callback(data);
 }
 
-/** Load HTML partial from file (Vite-compatible) */
+// Load HTML Templates
 export async function loadTemplate(path) {
-  try {
-    const res = await fetch(path); // For Vite: use "/partials/xxx.html"
-    if (!res.ok) throw new Error(`Template fetch failed: ${path}`);
-    return await res.text();
-  } catch (err) {
-    console.error(`Error loading template: ${path}`, err);
-    return `<p>Error loading ${path}</p>`;
-  }
+  const res = await fetch(path);
+  if (!res.ok) throw new Error(`Template not found: ${path}`);
+  return await res.text();
 }
 
-/** Load header/footer partials into page */
+// Load Header and Footer Partials
 export async function loadHeaderFooter() {
   try {
-    const headerTemplate = await loadTemplate('/partials/header.html');
-    const footerTemplate = await loadTemplate('/partials/footer.html');
+    const headerTemplate = await loadTemplate("../partials/header.html");
+    const footerTemplate = await loadTemplate("../partials/footer.html");
 
     const headerElement = document.querySelector("#main-header");
     const footerElement = document.querySelector("#main-footer");
 
-    if (headerElement) renderWithTemplate(headerTemplate, headerElement);
-    if (footerElement) renderWithTemplate(footerTemplate, footerElement);
+    renderWithTemplate(headerTemplate, headerElement);
+    renderWithTemplate(footerTemplate, footerElement);
   } catch (err) {
-    console.error("Error injecting header/footer:", err);
+    console.error("Error loading header/footer templates:", err);
   }
 }
 
-/** Debounce helper */
-export function debounce(fn, delay = 300) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
-  };
-}
-
-/** Keyword highlighting utility */
-export function highlight(text, keyword) {
-  if (!keyword || !text) return text;
-  const safeKeyword = keyword.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&'); // Escape special chars
-  const regex = new RegExp(`(${safeKeyword})`, "gi");
-  return text.replace(regex, "<mark>$1</mark>");
+// Highlight Search Match Text (Missing Export from Earlier)
+export function highlight(text, query) {
+  if (!query || !text) return text;
+  const regex = new RegExp(`(${query})`, "gi");
+  return text.replace(regex, `<span class="highlight">$1</span>`);
 }

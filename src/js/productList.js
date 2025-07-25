@@ -2,16 +2,16 @@ import ProductList from "./ProductList.mjs";
 import ProductData from "./ProductData.mjs";
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 
-// Load header and footer into the page
+// Load header and footer
 loadHeaderFooter();
 
-// Get selected category from URL parameter (e.g., ?category=tents)
+// Get category from URL
 const category = getParam("category");
 
-// Reference the UL element where products should be rendered
+// Get the element to render products
 const productListElement = document.querySelector(".product-list");
 
-// Optional product-specific discounts
+// Optional discount mapping
 const discounts = {
   tent: 0.15,
   backpack: 0.1,
@@ -19,13 +19,15 @@ const discounts = {
   "sleeping bag": 0.25
 };
 
-// Create instances of your data and rendering class
+// Instantiate data source and rendering logic
 const dataSource = new ProductData();
 const productList = new ProductList(category, dataSource, productListElement, discounts);
 
-// Fetch and display products
+// Display products
 productList.init();
 
-// Update heading dynamically based on category
+// Update the heading dynamically
 const heading = document.querySelector("h2");
-heading.textContent = `Products: ${category || "All"}`;
+if (heading) {
+  heading.textContent = `Products: ${category?.charAt(0).toUpperCase() + category?.slice(1) || "All"}`;
+}
