@@ -1,4 +1,3 @@
-// src/js/ShoppingCart.mjs
 import { getLocalStorage, renderListWithTemplate, loadTemplate } from '../../utils.mjs';
 
 function cartItemTemplate(item) {
@@ -18,6 +17,13 @@ export default class ShoppingCart {
   constructor(listElementSelector, storageKey = 'so-cart') {
     this.listElement = document.querySelector(listElementSelector);
     this.storageKey = storageKey;
+
+    console.log("Cart.js is now wired up and ready         !");
+    console.log(`ShoppingCart initialized with storage key: ${this.storageKey}`);
+    console.log(`List element found: ${this.listElement} `);
+    
+    
+    
   }
 
   async init() {

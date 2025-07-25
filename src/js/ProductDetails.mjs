@@ -28,6 +28,11 @@ export default class ProductDetails {
   }
 
   renderProductDetails() {
-    productDetailsTemplate(this.product); // Ensured naming consistency
+    productDetailsTemplate(this.product); 
+  }
+
+    console.log("Rendering product details...");
+    
+    renderProductDetailsUI(this.product);
   }
 }

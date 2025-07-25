@@ -1,4 +1,5 @@
-import { renderListWithTemplate } from "./utils.mjs";
+import { renderListWithTemplate, debounce, highlight } from "./utils.mjs";
+
 
 // Template for each product card
 function productCardTemplate(product) {
@@ -19,6 +20,19 @@ function productCardTemplate(product) {
         <img src="${imageSrc}" alt="${product.Name}" />
         <h3 class="card__brand">${brandName}</h3>
         <h2 class="card__name">${product.Name}</h2>
+=======
+  const query = product._searchQuery || "";
+  const highlightedName = highlight(product.Name || "", query);
+  const highlightedBrand = highlight(product.Brand?.Name || "", query);
+
+  return `
+    <li class="product-card">
+      <a href="/product-detail.html?id=${product.Id}">
+        <img src="${product.PrimaryMedium || '/images/default.jpg'}"
+             alt="${product.Name}"
+             onerror="this.src='/images/default.jpg';" />
+        <h3 class="card__brand">${highlightedBrand}</h3>
+        <h2 class="card__name">${highlightedName}</h2>
         ${hasDiscount ? `<p class="discount-flag">${discount * 100}% OFF</p>` : ""}
         <p class="product-card__price">
           ${
@@ -38,10 +52,12 @@ export default class ProductList {
     this.dataSource = dataSource;
     this.listElement = listElement;
     this.discounts = discounts;
+    this.originalList = [];
   }
 
   async init() {
     try {
+
       const list = await this.dataSource.getData(this.category); // ✅ Instructor-compliant
       console.log("Fetched products:", list);
 
@@ -61,6 +77,7 @@ export default class ProductList {
         return product;
       });
 
+
       this.renderList(discountedList);
     } catch (err) {
       console.error("Failed to load product data:", err);
@@ -70,5 +87,5 @@ export default class ProductList {
 
   renderList(list) {
     renderListWithTemplate(productCardTemplate, this.listElement, list, "afterbegin", true);
+    }
   }
-}
