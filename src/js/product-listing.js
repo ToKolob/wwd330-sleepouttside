@@ -1,30 +1,62 @@
 import ProductData from './ProductData.mjs';
-import ProductList from './ProductList.mjs';
-import { loadHeaderFooter, getParam } from './utils.mjs';
+import { loadHeaderFooter, getParam, getLocalStorage, setLocalStorage } from './utils.mjs';
 
-// Load header and footer into the page
 loadHeaderFooter();
 
-// Get category from URL, if present
 const category = getParam('category');
-
-// Optional: Capitalize for display
-function capitalize(text) {
-  return text ? text.charAt(0).toUpperCase() + text.slice(1) : 'All';
-}
-
-// Update page heading
 const heading = document.querySelector('.product-title');
 if (heading) {
-  heading.textContent = `Top Products: ${capitalize(category)}`;
+  heading.textContent = `Top Products: ${category ? category.charAt(0).toUpperCase() + category.slice(1) : 'All'}`;
 }
 
-// Use mock data during development (set to true to enable)
-const dataSource = new ProductData(true); // 👈 true = use mockProducts
-
-// Select list container
 const listElement = document.querySelector('.product-list');
+const dataSource = new ProductData(true); // set to false for live data
 
-// Initialize product list and render + attach search
-const myList = new ProductList(category, dataSource, listElement);
-myList.init();
+function applyDynamicDiscount(product) {
+  if (product.price > 5000) {
+    product.originalPrice = product.price;
+    product.price = Math.round(product.price * 0.9);
+    product.discounted = true;
+  }
+  return product;
+}
+
+function renderProducts(products) {
+  listElement.innerHTML = '';
+
+  products.forEach(original => {
+    const product = applyDynamicDiscount({ ...original });
+
+    const item = document.createElement('li');
+    item.classList.add('product-card');
+
+    item.innerHTML = `
+      <div class="card">
+        <a href="/product_pages/product-detail.html?id=${product.Id}">
+          <img src="${product.image}" alt="${product.name}" />
+          <h3>${product.Brand}</h3>
+          <h2>${product.name}</h2>
+        </a>
+        ${
+          product.discounted
+            ? `<p><del>₹${product.originalPrice}</del> <strong>₹${product.price}</strong></p>
+               <p class="discount-note">🎉 10% off on premium items!</p>`
+            : `<p>Price: ₹${product.price}</p>`
+        }
+        <button class="add-btn" data-id="${product.Id}">Add to Cart</button>
+      </div>
+    `;
+
+    item.querySelector('.add-btn').addEventListener('click', () => addToCart(product));
+    listElement.appendChild(item);
+  });
+}
+
+function addToCart(product) {
+  const cart = getLocalStorage('so-cart') || [];
+  cart.push(product);
+  setLocalStorage('so-cart', cart);
+  alert(`${product.name} added to cart!`);
+}
+
+dataSource.getData(category).then(products => renderProducts(products));
