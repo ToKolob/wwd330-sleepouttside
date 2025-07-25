@@ -29,7 +29,7 @@ function renderCartContents() {
 function cartItemTemplate(item, index) {
   const imageSrc = item.Image || "images/default.png";
   const quantity = item.quantity || 1;
-  const total = item.FinalPrice * quantity;
+  const total = (item.FinalPrice || item.price || item.originalPrice) * quantity;
 
   return `
     <li class="cart-card divider" data-index="${index}">
