@@ -1,7 +1,7 @@
 import { productDetailsTemplate } from './productDetailsTemplate.mjs';
 import { setLocalStorage, getLocalStorage } from './utils.mjs';
 
-// 🛍️ Modular class to handle individual product detail rendering and cart logic
+// Modular class to handle individual product detail rendering and cart logic
 export default class ProductDetails {
   constructor(productId, dataSource) {
     this.productId = productId;
@@ -14,7 +14,7 @@ export default class ProductDetails {
     this.renderProductDetails();
 
     document.getElementById('addToCart')
-      .addEventListener('click', this.addProductToCart.bind(this)); // 🔧 Fixed method name
+      .addEventListener('click', this.addProductToCart.bind(this)); 
   }
 
   addProductToCart() {
@@ -28,13 +28,13 @@ export default class ProductDetails {
   }
 }
 
-// 🎨 UI rendering function
+// UI rendering function
 function renderProductDetailsUI(product) {
   document.querySelector("h2").textContent = product.Brand?.Name || "Brand not available";
   document.querySelector("h3").textContent = product.NameWithoutBrand || product.Name;
 
   const productImage = document.getElementById("productImage");
-  productImage.src = product.PrimaryLarge || "/images/default.jpg"; // ✅ Updated image field
+  productImage.src = product.PrimaryLarge || "/images/default.jpg"; 
   productImage.alt = product.NameWithoutBrand || "Product image";
 
   document.getElementById("productPrice").textContent = `₹${product.FinalPrice}`;
