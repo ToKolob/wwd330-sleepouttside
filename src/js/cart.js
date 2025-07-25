@@ -5,6 +5,8 @@ loadHeaderFooter();
 
 document.addEventListener("DOMContentLoaded", renderCartContents);
 
+console.log("Cart.js is now wired up and ready!");
+
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
   const listElement = document.querySelector(".product-list");
@@ -56,25 +58,6 @@ function cartItemTemplate(item, index) {
   `;
 }
 
-function updateQuantity(event) {
-  const input = event.target;
-  const newQty = parseInt(input.value);
-  const cardElement = input.closest("li.cart-card");
-  const index = cardElement.dataset.index;
-  const cartItems = getLocalStorage("so-cart");
 
-  if (newQty < 1 || isNaN(newQty)) {
-    input.classList.add("input-error");
-    return;
-  } else {
-    input.classList.remove("input-error");
-  }
+renderCartContents();
 
-  // Update quantity in localStorage
-  cartItems[index].quantity = newQty;
-  setLocalStorage("so-cart", cartItems);
-
-  // Update total price visually
-  const totalElement = cardElement.querySelector(".item-total");
-  totalElement.textContent = (cartItems[index].FinalPrice * newQty).toFixed(2);
-}
