@@ -1,76 +1,64 @@
-// Query Selector Utility
+// wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
+// or a more concise version if you are into that sort of thing:
+// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-// Add Click & Touch Event Support
-export function setClick(selector, callback) {
-  const element = qs(selector);
-  if (!element) return;
-
-  element.addEventListener("touchend", (event) => {
-    event.preventDefault();
-    callback();
-  });
-  element.addEventListener("click", callback);
-}
-
-// Local Storage Helpers
+// retrieve data from localstorage
 export function getLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
-
+// save data to local storage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-
-// Get URL Parameter
-export function getParam(key) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(key);
+// set a listener for both touchend and click
+export function setClick(selector, callback) {
+  qs(selector).addEventListener("touchend", (event) => {
+    event.preventDefault();
+    callback();
+  });
+  qs(selector).addEventListener("click", callback);
 }
 
-// Render a List Using Template
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
-  if (clear) parentElement.innerHTML = "";
-  if (!list || list.length === 0) return;
-
-  const htmlString = list.map(templateFn).join("");
-  parentElement.insertAdjacentHTML(position, htmlString);
+// get the product id from the query string
+export function getParam(param) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const product = urlParams.get(param);
+  return product
 }
 
-// Render Static Template with Callback
+export function renderListWithTemplate(template, parentElement, list, position = "afterbegin", clear = false) {
+  const htmlStrings = list.map(template);
+  // if clear is true we need to clear out the contents of the parent.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
+
 export function renderWithTemplate(template, parentElement, data, callback) {
   parentElement.innerHTML = template;
-  if (callback) callback(data);
-}
-
-// Load HTML Templates
-export async function loadTemplate(path) {
-  const res = await fetch(path);
-  if (!res.ok) throw new Error(`Template not found: ${path}`);
-  return await res.text();
-}
-
-// Load Header and Footer Partials
-export async function loadHeaderFooter() {
-  try {
-    const headerTemplate = await loadTemplate("../partials/header.html");
-    const footerTemplate = await loadTemplate("../partials/footer.html");
-
-    const headerElement = document.querySelector("#main-header");
-    const footerElement = document.querySelector("#main-footer");
-
-    renderWithTemplate(headerTemplate, headerElement);
-    renderWithTemplate(footerTemplate, footerElement);
-  } catch (err) {
-    console.error("Error loading header/footer templates:", err);
+  if (callback) {
+    callback(data);
   }
 }
 
-// Highlight Search Match Text (Missing Export from Earlier)
-export function highlight(text, query) {
-  if (!query || !text) return text;
-  const regex = new RegExp(`(${query})`, "gi");
-  return text.replace(regex, `<span class="highlight">$1</span>`);
+async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
+  return template;
+}
+
+export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("../partials/header.html");
+  const footerTemplate = await loadTemplate("../partials/footer.html");
+
+  const headerElement = document.querySelector("#main-header");
+  const footerElement = document.querySelector("#main-footer");
+
+  renderWithTemplate(headerTemplate, headerElement);
+  renderWithTemplate(footerTemplate, footerElement);
 }

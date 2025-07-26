@@ -2,7 +2,7 @@
   <div class="container">
     <!-- logo & title -->
     <div class="logo-title">
-      <img src="/images/noun_Tent_2517.svg" alt="tent logo" class="logo-img" />
+      <img src="/images/noun_Tent_2517.svg" alt="Sleep Outside tent logo" class="logo-img" />
       <h1 class="site-title">
         Welcome to Sleep<span class="highlight">Outside</span>
       </h1>
@@ -10,21 +10,22 @@
 
     <!-- navigation -->
     <nav class="main-nav" aria-label="Main navigation">
-      <a href="../../index.html">Home</a>
-      <a href="../../about.html">About</a>
-      <a href="../../cart/index.html">Cart</a>
+      <a href="/index.html">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/cart/index.html">Cart</a>
     </nav>
 
     <!-- theme toggle -->
     <button id="theme-toggle" aria-label="Toggle dark mode" class="theme-toggle">🌙</button>
 
-    <!-- cart icon with count badge -->
+    <!-- cart icon with dynamic count -->
     <div class="cart">
-      <a href="cart/index.html" aria-label="View cart">
+      <a href="/cart/index.html" aria-label="View cart">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="cart-icon">
-          <!-- SVG paths -->
+          <!-- 🛒 SVG paths from teacher version -->
+          <!-- Copy entire <path> blocks from provided SVG if preserving visual detail -->
         </svg>
-        <span class="cart-count">0</span>
+        <span class="cart-count" id="cart-count">0</span>
       </a>
     </div>
   </div>

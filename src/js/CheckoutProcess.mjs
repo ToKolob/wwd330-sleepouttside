@@ -1,4 +1,25 @@
-import { getLocalStorage } from "./utils.mjs"; 
+import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import ExternalServices from "./ExternalServices.mjs";
+
+const services = new ExternalServices();
+
+function formDataToJSON(formElement) {
+  const formData = new FormData(formElement);
+  const convertedJSON = {};
+  formData.forEach((value, key) => {
+    convertedJSON[key] = value;
+  });
+  return convertedJSON;
+}
+
+function packageItems(items) {
+  return items.map(item => ({
+    id: item.Id,
+    name: item.Name,
+    price: item.FinalPrice,
+    quantity: item.quantity || 1,
+  }));
+}
 
 export default class CheckoutProcess {
   constructor(key, outputSelector) {
@@ -14,65 +35,46 @@ export default class CheckoutProcess {
   init() {
     this.list = getLocalStorage(this.key) || [];
     this.renderCartItems();
-    this.calculateItemSubTotal();
-    this.addQuantityListeners();
+    this.calculateItemSummary();
+    this.calculateOrderTotal();
   }
 
   renderCartItems() {
-    const cartContainer = document.querySelector(`${this.outputSelector} .checkout-cart`);
-    cartContainer.innerHTML = ""; // clear before rendering
+    const cartContainer = document.querySelector(this.outputSelector + " .checkout-cart");
+    if (!cartContainer) return;
+
+    cartContainer.innerHTML = "";
 
     this.list.forEach(item => {
       const itemEl = document.createElement("div");
       itemEl.classList.add("checkout-item");
       itemEl.innerHTML = `
-        <span>${item.Name}</span>
-        <span>Price: $${item.FinalPrice}</span>
-        <label>Qty: 
-          <input type="number" min="1" value="${item.quantity}" data-id="${item.Id}" class="item-qty" />
-        </label>
+        <span class="item-name">${item.Name}</span>
+        <span class="item-qty">Qty: ${item.quantity || 1}</span>
+        <span class="item-price">₹${item.FinalPrice.toFixed(2)}</span>
+        <span class="item-subtotal">Subtotal: ₹${(item.FinalPrice * (item.quantity || 1)).toFixed(2)}</span>
       `;
       cartContainer.appendChild(itemEl);
     });
   }
 
-  addQuantityListeners() {
-    const qtyInputs = document.querySelectorAll(`${this.outputSelector} .item-qty`);
-    qtyInputs.forEach(input => {
-      input.addEventListener("input", () => {
-        const itemId = input.dataset.id;
-        const newQty = parseInt(input.value);
+  calculateItemSummary() {
+    const summaryElement = document.querySelector(this.outputSelector + " #cartTotal");
+    const itemNumElement = document.querySelector(this.outputSelector + " #num-items");
 
-        // update quantity in list
-        const item = this.list.find(product => product.Id === itemId);
-        if (item && newQty > 0) {
-          item.quantity = newQty;
-          this.calculateItemSubTotal();
-        }
-      });
-    });
-  }
+    const totalItems = this.list.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    itemNumElement.innerText = totalItems;
 
-  calculateItemSubTotal() {
-    this.itemTotal = 0;
-    let numItems = 0;
+    const amounts = this.list.map(item => item.FinalPrice * (item.quantity || 1));
+    this.itemTotal = amounts.reduce((sum, item) => sum + item, 0);
 
-    this.list.forEach(item => {
-      this.itemTotal += item.FinalPrice * item.quantity;
-      numItems += item.quantity;
-    });
-
-    const cartTotalEl = document.querySelector(`${this.outputSelector} #cartTotal`);
-    const itemCountEl = document.querySelector(`${this.outputSelector} #numberItems`);
-
-    if (cartTotalEl) cartTotalEl.innerText = `$${this.itemTotal.toFixed(2)}`;
-    if (itemCountEl) itemCountEl.innerText = numItems;
+    summaryElement.innerText = `₹${this.itemTotal.toFixed(2)}`;
   }
 
   calculateOrderTotal() {
-    this.tax = this.itemTotal * 0.12;
-    this.shipping = this.itemTotal > 0 ? 8.5 : 0;
-    this.orderTotal = this.itemTotal + this.tax + this.shipping;
+    this.tax = this.itemTotal * 0.06;
+    this.shipping = 10 + (this.list.length - 1) * 2;
+    this.orderTotal = parseFloat(this.itemTotal + this.tax + this.shipping);
 
     this.displayOrderTotals();
   }
@@ -80,10 +82,51 @@ export default class CheckoutProcess {
   displayOrderTotals() {
     const taxEl = document.querySelector(`${this.outputSelector} #tax`);
     const shippingEl = document.querySelector(`${this.outputSelector} #shipping`);
-    const totalEl = document.querySelector(`${this.outputSelector} #total`);
+    const orderTotalEl = document.querySelector(`${this.outputSelector} #orderTotal`);
 
-    if (taxEl) taxEl.innerText = `$${this.tax.toFixed(2)}`;
-    if (shippingEl) shippingEl.innerText = `$${this.shipping.toFixed(2)}`;
-    if (totalEl) totalEl.innerText = `$${this.orderTotal.toFixed(2)}`;
+    taxEl.innerText = `₹${this.tax.toFixed(2)}`;
+    shippingEl.innerText = `₹${this.shipping.toFixed(2)}`;
+    orderTotalEl.innerText = `₹${this.orderTotal.toFixed(2)}`;
+  }
+
+  async checkout() {
+    const formElement = document.forms["checkout"];
+    const order = formDataToJSON(formElement);
+
+    order.orderDate = new Date().toISOString();
+    order.orderTotal = this.orderTotal;
+    order.tax = this.tax;
+    order.shipping = this.shipping;
+    order.items = packageItems(this.list);
+
+    try {
+      const response = await services.checkout(order);
+      console.log(response);
+
+      alert("Order placed successfully!");
+
+      // ✅ Clear cart in localStorage
+      localStorage.removeItem(this.key);
+
+      // Clear cart from memory and localStorage
+      this.list = [];
+      localStorage.removeItem(this.key);
+      setLocalStorage(this.key, this.list); // Optional but helpful if other components read from this
+
+      // Rerender empty cart before redirect
+      this.renderCartItems();
+      this.calculateItemSummary();
+      this.calculateOrderTotal();
+
+      // ✅ Optionally refresh cart.html if you're on it
+      if (window.location.pathname.includes("cart.html")) {
+        window.location.reload();
+      }
+
+      // ✅ Redirect to homepage
+      window.location.href = "/index.html"; // modify path if needed
+    } catch (err) {
+      console.error("Checkout failed:", err);
+    }
   }
 }
