@@ -1,42 +1,31 @@
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import { getParam, loadHeaderFooter } from "./utils.mjs";
+import { renderProductDetailsUI } from "./productDetailsTemplate.mjs";
 
-// Load site header and footer
+// Load global header and footer components
 loadHeaderFooter();
 
-// 🔍 Get product ID from URL
+// 🔍 Extract product ID from query string
 const productId = getParam("id");
 
-// 📦 Create a ProductData instance
-const dataSource = new ProductData();
+// 📦 Instantiate data source using refactored service
+const dataSource = new ExternalServices();
 
-// 🧩 Render product details
+// 🧩 Render product details dynamically
 async function renderProductDetails() {
   try {
     const product = await dataSource.findProductById(productId);
 
     if (!product) {
-      document.querySelector(".product-detail").innerHTML =
-        "<p>Product not found.</p>";
+      document.querySelector(".product-detail").innerHTML = "<p>Product not found.</p>";
       return;
     }
 
-    const imageURL = product.PrimaryLarge || "/images/default.jpg";
-    const brandName = product.Brand?.Name || "Unknown";
-    const description = product.Description || "No description available.";
-    const price = product.FinalPrice ? `₹${product.FinalPrice}` : "Price not available";
-
-    document.querySelector(".product-detail").innerHTML = `
-      <h2>${product.Name}</h2>
-      <img src="${imageURL}" alt="${product.Name}" />
-      <p><strong>Brand:</strong> ${brandName}</p>
-      <p><strong>Price:</strong> ${price}</p>
-      <p>${description}</p>
-    `;
+    // Use modular UI renderer
+    renderProductDetailsUI(product);
   } catch (error) {
     console.error("Error fetching product details:", error);
-    document.querySelector(".product-detail").innerHTML =
-      "<p>Error loading product.</p>";
+    document.querySelector(".product-detail").innerHTML = "<p>Error loading product.</p>";
   }
 }
 

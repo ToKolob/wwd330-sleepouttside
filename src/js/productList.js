@@ -1,17 +1,17 @@
 import ProductList from "./ProductList.mjs";
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 
-// Load header and footer
+// Inject reusable header and footer components
 loadHeaderFooter();
 
-// Get category from URL
+// Get the category value from URL query string
 const category = getParam("category");
 
-// Get the element to render products
+// Grab the DOM element where products will render
 const productListElement = document.querySelector(".product-list");
 
-// Optional discount mapping
+// Optional category-based discounts
 const discounts = {
   tent: 0.15,
   backpack: 0.1,
@@ -19,15 +19,17 @@ const discounts = {
   "sleeping bag": 0.25
 };
 
-// Instantiate data source and rendering logic
-const dataSource = new ProductData();
+// Instantiate data source and product list renderer
+const dataSource = new ExternalServices();
 const productList = new ProductList(category, dataSource, productListElement, discounts);
 
-// Display products
+// Initialize product list
 productList.init();
 
-// Update the heading dynamically
+// Update the page heading based on category
 const heading = document.querySelector("h2");
 if (heading) {
-  heading.textContent = `Products: ${category?.charAt(0).toUpperCase() + category?.slice(1) || "All"}`;
+  heading.textContent = category
+    ? `Products: ${category.charAt(0).toUpperCase() + category.slice(1)}`
+    : "Products: All";
 }

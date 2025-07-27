@@ -1,95 +1,23 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sleep Outside | Products</title>
-    <link rel="stylesheet" href="../css/style.css" />
-    <script src="../js/product-listing.js" type="module"></script>
-  </head>
 
-  <body>
-    
-    <header class="divider" id="main-header"></header>
-
-    <main class="divider">      
-      <section class="products">
-        <h2>Top Products: <span class="title highlight"></span></h2>
-        <ul class="product-list"></ul>
-      </section>
-      
-      <section class="category-grid">
-        <a class="category-card" href="listing.html?category=tents">
-          <img src="/images/noun_Tent_2517.svg" alt="Tents" />
-          <span>Tents</span>
-        </a>
-        <a class="category-card" href="listing.html?category=sleepingbags">
-          <img src="/images/sleepingbag-icon.svg" alt="Sleeping Bags" />
-          <span>Sleeping Bags</span>
-        </a>
-        <a class="category-card" href="listing.html?category=backpacks">
-          <img src="/images/backpack-icon.svg" alt="Backpacks" />
-          <span>Backpacks</span>
-        </a>
-        <a class="category-card" href="listing.html?category=hammocks">
-          <img src="/images/hammock-icon.svg" alt="Hammocks" />
-          <span>Hammocks</span>
-        </a>
-      </section>
-    </main>
-    
-    <footer id="main-footer"></footer>
-  </body>
-=======
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sleep Outside | Product Listing</title>
-  <link rel="stylesheet" href="/css/style.css" />
-  <script type="module" src="/js/product-listing.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sleep Outside | Products</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/product-listing.js" type="module"></script>
 </head>
 
 <body>
-  <header id="main-header"></header>
-
-  <main>
-    <h1>Top Products</h1>
-    
-
-    <div class="product-search">
-      <input type="text" id="searchInput" placeholder="Search products..." />
-      <ul id="search-suggestions" class="suggestion-list"></ul>
-    </div>
-
-    <div class="tag-filter keyword-container">
-      <button class="tag" data-tag="2-person">2-Person</button>
-      <button class="tag" data-tag="ultralight">Ultralight</button>
-      <button class="tag" data-tag="4-season">4-Season</button>
-    </div>
-
-    <div class="price-filter">
-      <label>Min ₹<input type="number" id="minPrice" /></label>
-      <label>Max ₹<input type="number" id="maxPrice" /></label>
-    </div>
-
-    <ul class="product-list">
-      <!-- Products rendered here -->
-    </ul>
-
-    <section id="product-detail" class="product-detail hidden">
-      <div class="product-card--detail">
-        <img id="detail-image" alt="Product Image" />
-        <div class="detail-info">
-          <h2 id="detail-name"></h2>
-          <p id="detail-brand"></p>
-          <p id="detail-price"></p>
-          <p id="detail-category"></p>
-          <button id="back-to-list">⬅ Back to Products</button>
-        </div>
-      </div>
+  <header class="divider" id="main-header"></header>
+  <main class="divider">
+    <section class="products">
+      <h2>Top Products: <span class="title highlight"></span></h2>
+      <ul class="product-list"></ul>
     </section>
   </main>
-
   <footer id="main-footer"></footer>
 </body>
+
 </html>

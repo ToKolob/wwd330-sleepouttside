@@ -1,66 +1,77 @@
 import ProductList from './ProductList.mjs';
-import ProductData from './ProductData.mjs';
+import ExternalServices from './ExternalServices.mjs';
 import { loadHeaderFooter, getParam } from './utils.mjs';
 
-// Load header and footer dynamically
+// Inject header and footer
 loadHeaderFooter();
 
-// DOM elements
+// Get parameters
 const productId = getParam('id');
-const category = getParam('category'); // ⭐ New: allows category-based filtering
-const listElement = document.querySelector('.product-list');
-const productSection = document.querySelector('.products');
-const detailSection = document.getElementById('product-detail');
-const backBtn = document.getElementById('back-to-list');
+const category = getParam('category');
 
-// Load mock data (change false to use real API)
-const dataSource = new ProductData(true);
+// Data service (mock mode enabled)
+const dataSource = new ExternalServices(true);
 
-// Instantiate the product list — pass category if available
-const productList = new ProductList(category, dataSource, listElement);
+document.addEventListener('DOMContentLoaded', () => {
+  // DOM references
+  const listElement = document.querySelector('.product-list');
+  const productSection = document.querySelector('.products');
+  const detailSection = document.getElementById('product-detail');
+  const backBtn = document.getElementById('back-to-list');
+  const toggleBtn = document.getElementById('theme-toggle');
 
-// Handle back-to-list button for detail page
-if (backBtn) {
-  backBtn.addEventListener('click', () => {
+  // Setup product list
+  const productList = new ProductList(category, dataSource, listElement);
+
+  // Navigate back to listing
+  backBtn?.addEventListener('click', () => {
     window.location.href = 'index.html';
   });
-}
 
-// Load either a single product detail or the full product list
-if (productId) {
-  productSection.style.display = 'none';
-  detailSection.style.display = 'block';
+  // 🖼 Show either product detail or list
+  if (productId && detailSection) {
+    productSection?.style.setProperty('display', 'none');
+    detailSection.style.setProperty('display', 'block');
 
-  dataSource.findProductById(productId)
-    .then(product => {
-      if (!product) {
-        detailSection.innerHTML = '<p>Product not found.</p>';
-        return;
-      }
+    dataSource.findProductById(productId)
+      .then(product => {
+        if (!product) {
+          detailSection.innerHTML = '<p>Product not found.</p>';
+          return;
+        }
 
-      document.getElementById('detail-name').textContent = product.Name;
-      document.getElementById('detail-image').src = product.PrimaryMedium || '/images/default.jpg';
-      document.getElementById('detail-image').alt = product.Name;
-      document.getElementById('detail-brand').textContent = `Brand: ${product.Brand?.Name || 'Unknown'}`;
-      document.getElementById('detail-price').textContent = `Price: ₹${product.FinalPrice || product.ListPrice}`;
-      document.getElementById('detail-category').textContent = `Category: ${product.Category || 'N/A'}`;
-    })
-    .catch(err => {
-      console.error('Error loading product detail:', err);
-    });
-} else {
-  productSection.style.display = 'block';
-  detailSection.style.display = 'none';
-  productList.init(); // ✅ Loads product list and search features
-}
+        const nameEl = document.getElementById('detail-name');
+        const imageEl = document.getElementById('detail-image');
+        const brandEl = document.getElementById('detail-brand');
+        const priceEl = document.getElementById('detail-price');
+        const categoryEl = document.getElementById('detail-category');
 
-// 🌙 Dark mode toggle after header loads
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.getElementById('theme-toggle');
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-    });
+        if (nameEl) nameEl.textContent = product.Name;
+        if (imageEl) {
+          imageEl.src = product.PrimaryMedium || '/images/default.jpg';
+          imageEl.alt = product.Name;
+        }
+        if (brandEl) brandEl.textContent = `Brand: ${product.Brand?.Name || 'Unknown'}`;
+        if (priceEl) priceEl.textContent = `Price: ₹${product.FinalPrice || product.ListPrice}`;
+        if (categoryEl) categoryEl.textContent = `Category: ${product.Category || 'N/A'}`;
+      })
+      .catch(err => {
+        console.error('Error loading product detail:', err);
+        detailSection.innerHTML = '<p>Error loading product details.</p>';
+      });
+  } else {
+    productSection?.style.setProperty('display', 'block');
+    detailSection?.style.setProperty('display', 'none');
+    listElement && productList.init();
   }
+
+  // Theme toggle
+  toggleBtn?.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+  });
+});
+
+document.querySelector("#place-order-btn").addEventListener("click", () => {
+  checkout.checkout();
 });
