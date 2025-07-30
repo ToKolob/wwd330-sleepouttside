@@ -68,11 +68,3 @@ document.addEventListener('DOMContentLoaded', () => {
     toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
   });
 
-});
-
-// document.querySelector("#place-order-btn").addEventListener("click", () => {
-//   checkout.checkout();
-// });
-
-});
-
