@@ -2,7 +2,7 @@ import { getLocalStorage, loadHeaderFooter, setLocalStorage } from "./utils.mjs"
 
 loadHeaderFooter();
 
-// Optional cart clear based on URL param
+// ✅ Optional cart clear based on URL param
 const urlParams = new URLSearchParams(window.location.search);
 if (urlParams.get("cleared") === "true") {
   localStorage.removeItem("so-cart");
@@ -24,17 +24,18 @@ function renderCartContents() {
     return;
   }
 
+  // ✅ Render cart items
   const htmlItems = cartItems.map(cartItemTemplate);
   cartSection.innerHTML = htmlItems.join("");
 
-  // Total Calculation
+  // ✅ Calculate total cost
   const total = cartItems.reduce((sum, item) => {
     return sum + item.FinalPrice * (item.quantity || 1);
   }, 0);
   totalElement && (totalElement.textContent = `Total: ₹${total.toFixed(2)}`);
   cartFooter?.classList.remove("hide");
 
-  // Cart Badge Count
+  // ✅ Update cart badge
   if (cartBadge) {
     const badgeCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
     cartBadge.textContent = badgeCount.toString();
@@ -58,5 +59,5 @@ function cartItemTemplate(item) {
   </li>`;
 }
 
-// Initialize on page load
+// ✅ Initialize cart rendering
 renderCartContents();

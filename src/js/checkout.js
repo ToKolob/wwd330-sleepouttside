@@ -1,19 +1,26 @@
-import { loadHeaderFooter } from "./utils.mjs";
-import { CheckoutProcess } from "./CheckoutProcess.mjs";
-
+import { CheckoutProcess } from "../js/CheckoutProcess.mjs";
+import { loadHeaderFooter } from "../js/utils.mjs";
 loadHeaderFooter();
 
-const order = new CheckoutProcess("so-cart", ".checkout-summary");
-order.init();
+document.addEventListener("DOMContentLoaded", () => {
+  const checkout = new CheckoutProcess("so-cart", ".checkout-summary");
+  checkout.init();
 
-// Add event listeners to fire calculateOrderTotal when the user changes the zip code
-document
-  .querySelector("#zip")
-  .addEventListener("blur", order.calculateOrderTotal.bind(order));
+  const form = document.getElementById("checkout-form");
+  const placeOrderBtn = document.getElementById("place-order-btn");
 
-// listening for click on the button
-document.querySelector("#checkoutSubmit").addEventListener("click", (e) => {
-  e.preventDefault();
+  placeOrderBtn?.addEventListener("click", (e) => {
+    e.preventDefault(); // Prevent default button behavior
 
-  order.checkout();
+    // Validate form using browser validation API
+    const isValid = form.checkValidity();
+    form.reportValidity(); // Show validation messages if any fields are invalid
+
+    if (!isValid) return; // Don't continue if form is invalid
+
+    // Confirm and proceed with checkout
+    if (confirm("Confirm placing your order?")) {
+      checkout.checkout();
+    }
+  });
 });
