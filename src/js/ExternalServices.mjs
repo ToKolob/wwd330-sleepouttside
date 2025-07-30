@@ -9,21 +9,43 @@ function convertToJson(res) {
 }
 
 export default class ExternalServices {
-  constructor() {
-    // this.category = category;
-    // this.path = `../public/json/${this.category}.json`;
+  constructor(mockMode = false) {
+    this.mockMode = mockMode;
   }
+  
   async getData(category) {
-    const response = await fetch(`${baseURL}products/search/${category}`);
-    const data = await convertToJson(response);
-    
-    return data.Result;
+    if (this.mockMode) {
+      // Use local JSON files in mock mode
+      const response = await fetch(`/json/${category}.json`);
+      const data = await convertToJson(response);
+      return data;
+    } else {
+      // Use external API
+      const response = await fetch(`${baseURL}products/search/${category}`);
+      const data = await convertToJson(response);
+      return data.Result;
+    }
   }
+  
   async findProductById(id) {
-    const response = await fetch(`${baseURL}product/${id}`);
-    const data = await convertToJson(response);
-    // console.log(data.Result);
-    return data.Result;
+    if (this.mockMode) {
+      // In mock mode, we'll need to search through all categories
+      const categories = ['tents', 'sleeping-bags', 'backpacks'];
+      for (const category of categories) {
+        try {
+          const products = await this.getData(category);
+          const product = products.find(p => p.Id === id);
+          if (product) return product;
+        } catch (error) {
+          console.warn(`Could not load ${category}.json:`, error);
+        }
+      }
+      return null;
+    } else {
+      const response = await fetch(`${baseURL}product/${id}`);
+      const data = await convertToJson(response);
+      return data.Result;
+    }
   }
 
   async checkout(payload) {

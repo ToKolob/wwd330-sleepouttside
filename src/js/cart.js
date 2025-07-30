@@ -28,10 +28,18 @@ function renderCartContents() {
   const htmlItems = cartItems.map(cartItemTemplate);
   cartSection.innerHTML = htmlItems.join("");
 
+
+  // Add event listeners to remove buttons
+  addRemoveButtonListeners();
+
+  // Total Calculation
+  const total = cartItems.reduce((sum, item) => sum + item.FinalPrice * (item.quantity || 1), 0);
+
   // ✅ Calculate total cost
   const total = cartItems.reduce((sum, item) => {
     return sum + item.FinalPrice * (item.quantity || 1);
   }, 0);
+
   totalElement && (totalElement.textContent = `Total: ₹${total.toFixed(2)}`);
   cartFooter?.classList.remove("hide");
 
@@ -40,6 +48,30 @@ function renderCartContents() {
     const badgeCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
     cartBadge.textContent = badgeCount.toString();
   }
+}
+
+function addRemoveButtonListeners() {
+  const removeButtons = document.querySelectorAll(".remove-item-btn");
+  removeButtons.forEach(button => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      const productId = button.dataset.productId;
+      removeFromCart(productId);
+    });
+  });
+}
+
+function removeFromCart(productId) {
+  let cartItems = getLocalStorage("so-cart") || [];
+  
+  // Remove the item with the matching ID
+  cartItems = cartItems.filter(item => item.Id !== productId);
+  
+  // Update localStorage
+  setLocalStorage("so-cart", cartItems);
+  
+  // Re-render the cart
+  renderCartContents();
 }
 
 function cartItemTemplate(item) {
@@ -53,9 +85,10 @@ function cartItemTemplate(item) {
     <a href="#">
       <h2 class="card__name">${item.Name}</h2>
     </a>
-    <p class="cart-card__color">${item.Colors[0].ColorName}</p>
+    <p class="cart-card__color">${item.Colors && item.Colors.length > 0 ? item.Colors[0].ColorName : "Color not specified"}</p>
     <p class="cart-card__quantity">qty: ${quantity}</p>
     <p class="cart-card__price">₹${totalPrice}</p>
+    <button class="remove-item-btn" data-product-id="${item.Id}" title="Remove item from cart">✕</button>
   </li>`;
 }
 
