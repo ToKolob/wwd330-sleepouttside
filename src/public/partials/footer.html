@@ -1,3 +1,25 @@
 <footer>
-      <p>&copy;2025 | WDD330 | Sleep Outiside | BYU-Idaho</p>
+  <p>&copy;2025 | WDD330 | Sleep Outside | BYU-Idaho</p>
+
+  <section id="newsletter-signup" style="margin-top: 1rem;">
+    <h3>📬 Stay updated!</h3>
+    <form id="newsletter-form" style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 300px;">
+      <label for="email">Subscribe to our newsletter:</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        placeholder="you@example.com"
+        style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"
+      />
+      <button
+        type="submit"
+        style="padding: 0.5rem; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;"
+      >
+        Sign Up
+      </button>
+    </form>
+    <div id="newsletter-message" style="margin-top: 0.5rem; font-weight: bold;"></div>
+  </section>
 </footer>

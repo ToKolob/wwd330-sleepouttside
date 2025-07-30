@@ -1,4 +1,4 @@
-/**
+/** 
  * Renders a list of items using a template function
  * @param {HTMLElement} listElement
  * @param {Array} list
@@ -12,7 +12,7 @@ export function renderListWithTemplate(listElement, list, template) {
   });
 }
 
-/**
+/** 
  * Retrieves data from localStorage
  * @param {string} key
  * @returns {Array|Object|null}
@@ -27,7 +27,7 @@ export function getLocalStorage(key) {
   }
 }
 
-/**
+/** 
  * Saves data to localStorage
  * @param {string} key
  * @param {Array|Object} data
@@ -40,7 +40,7 @@ export function setLocalStorage(key, data) {
   }
 }
 
-/**
+/** 
  * Removes a specific item from localStorage array by ID
  * @param {string} key
  * @param {string} productId
@@ -53,7 +53,7 @@ export function removeItemFromStorage(key, productId) {
   }
 }
 
-/**
+/** 
  * Loads reusable header and footer templates
  */
 export function loadHeaderFooter() {
@@ -82,7 +82,7 @@ export function loadHeaderFooter() {
     });
 }
 
-/**
+/** 
  * Get URL query parameters
  * @param {string} param
  * @returns {string|null}
@@ -92,7 +92,7 @@ export function getParam(param) {
   return url.searchParams.get(param);
 }
 
-/**
+/** 
  * Creates and displays a dismissible alert message on the page
  * @param {string} message - The alert message to display
  * @param {boolean} [scroll=true] - Scrolls to top to ensure visibility
@@ -117,5 +117,42 @@ export function alertMessage(message, scroll = true) {
     if (e.target.classList.contains('close-alert')) {
       main.removeChild(alert);
     }
+  });
+}
+
+/** 
+ * Newsletter signup form handler
+ */
+export function handleNewsletterSignup() {
+  const form = document.getElementById('newsletter-form');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('email');
+    const messageDiv = document.getElementById('newsletter-message');
+
+    const email = emailInput.value.trim();
+
+    // Basic email validation
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!validEmail) {
+      messageDiv.textContent = '❌ Please enter a valid email address.';
+      messageDiv.style.color = 'red';
+      return;
+    }
+
+    // Save email locally (simulating newsletter subscription)
+    localStorage.setItem('subscriber-email', email);
+
+    // Update the UI with confirmation message
+    messageDiv.textContent = `✅ You're subscribed! Watch your inbox at ${email} for Sleep Outside updates and tips.`;
+    messageDiv.style.color = 'green';
+
+    // Optional: scroll into view for visibility
+    messageDiv.scrollIntoView({ behavior: 'smooth' });
+
+    // Clear input after submission
+    emailInput.value = '';
   });
 }
