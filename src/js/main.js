@@ -72,6 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-document.querySelector("#place-order-btn").addEventListener("click", () => {
-  checkout.checkout();
-});
+// document.querySelector("#place-order-btn").addEventListener("click", () => {
+//   checkout.checkout();
+// });
