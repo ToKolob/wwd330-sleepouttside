@@ -424,10 +424,16 @@ mark {
 }
 
 .product-card--detail img {
-  max-width: 300px;
-  width: 100%;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
   border-radius: 8px;
 }
+
+.product-listing {
+  min-height: 600px; /* or whatever fits your layout */
+}
+
 
 .detail-info {
   flex: 1;
@@ -596,6 +602,42 @@ body {
 
 del {
   color: #888;
+}
+
+.checkout-summary {
+  min-height: 200px;
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.checkout-summary.loaded {
+  opacity: 1;
+}
+
+.alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 1em;
+  margin-bottom: 1em;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hidden {
+  display: none;
+}
+
+
+.alert .close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2em;
+  color: #721c24;
+  cursor: pointer;
 }
 
 
