@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const checkout = new CheckoutProcess("so-cart", "#cart-summary");
   checkout.init();
+});
 
   document.querySelector('#place-order-btn')?.addEventListener("click", () => {
     checkout.checkout();
@@ -64,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   toggleBtn?.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-    toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
-  });
+  document.body.classList.toggle('dark-mode');
+  toggleBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
 });
