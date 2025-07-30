@@ -28,18 +28,13 @@ function renderCartContents() {
   const htmlItems = cartItems.map(cartItemTemplate);
   cartSection.innerHTML = htmlItems.join("");
 
-
   // Add event listeners to remove buttons
   addRemoveButtonListeners();
-
-  // Total Calculation
-  const total = cartItems.reduce((sum, item) => sum + item.FinalPrice * (item.quantity || 1), 0);
 
   // ✅ Calculate total cost
   const total = cartItems.reduce((sum, item) => {
     return sum + item.FinalPrice * (item.quantity || 1);
   }, 0);
-
   totalElement && (totalElement.textContent = `Total: ₹${total.toFixed(2)}`);
   cartFooter?.classList.remove("hide");
 
@@ -63,13 +58,13 @@ function addRemoveButtonListeners() {
 
 function removeFromCart(productId) {
   let cartItems = getLocalStorage("so-cart") || [];
-  
-  // Remove the item with the matching ID
-  cartItems = cartItems.filter(item => item.Id !== productId);
-  
+
+  // ✅ Safer ID comparison
+  cartItems = cartItems.filter(item => item.Id.toString() !== productId);
+
   // Update localStorage
   setLocalStorage("so-cart", cartItems);
-  
+
   // Re-render the cart
   renderCartContents();
 }

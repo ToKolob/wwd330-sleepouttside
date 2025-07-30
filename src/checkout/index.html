@@ -82,29 +82,35 @@
   <script type="module" src="../js/checkout.js"></script>
 
   <!-- ⚙️ Modular JS Loader -->
-  <script type="module">
-    import { CheckoutProcess } from "../js/CheckoutProcess.mjs";
-    import { loadHeaderFooter } from "../js/utils.mjs";
-    loadHeaderFooter();
+<script type="module">
+  import { CheckoutProcess } from "../js/CheckoutProcess.mjs";
+  import { loadHeaderFooter, handleNewsletterSignup } from "../js/utils.mjs";
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const checkout = new CheckoutProcess("so-cart", ".checkout-summary");
-      checkout.init();
+  // Load header and footer templates
+  loadHeaderFooter();
 
-      const form = document.getElementById("checkout-form");
-      const button = document.getElementById("place-order-btn");
+  document.addEventListener("DOMContentLoaded", () => {
+    // 🛒 Initialize Checkout
+    const checkout = new CheckoutProcess("so-cart", ".checkout-summary");
+    checkout.init();
 
-      button?.addEventListener("click", (e) => {
-        e.preventDefault();
+    const form = document.getElementById("checkout-form");
+    const button = document.getElementById("place-order-btn");
 
-        const isValid = form.checkValidity();
-        form.reportValidity();
+    button?.addEventListener("click", (e) => {
+      e.preventDefault();
 
-        if (isValid && confirm("Confirm placing your order?")) {
-          checkout.checkout();
-        }
-      });
+      const isValid = form.checkValidity();
+      form.reportValidity();
+
+      if (isValid && confirm("Confirm placing your order?")) {
+        checkout.checkout();
+      }
     });
-  </script>
+
+    // 📬 Initialize Newsletter Signup
+    handleNewsletterSignup();
+  });
+</script>
 </body>
 </html>
