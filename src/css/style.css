@@ -209,9 +209,11 @@ button {
 .cart-card {
   display: grid;
   grid-template-columns: 25% auto 15%;
+  grid-template-rows: auto auto auto;
   font-size: var(--small-font);
   /* max-height: 120px; */
   align-items: center;
+  gap: 8px;
 }
 
 .cart-card__image {
@@ -241,6 +243,32 @@ button {
 .cart-card__price {
   grid-row: 2;
   grid-column: 3;
+}
+
+.remove-item-btn {
+  grid-row: 3;
+  grid-column: 1 / -1;
+  background-color: #e60023;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 8px;
+  transition: background-color 0.3s ease;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.remove-item-btn:hover {
+  background-color: #cc001f;
 }
 
 .discount-flag {
@@ -584,6 +612,7 @@ del {
   .cart-card {
     font-size: inherit;
     grid-template-columns: 150px auto 15%;
+    grid-template-rows: auto auto auto;
   }
 }
 

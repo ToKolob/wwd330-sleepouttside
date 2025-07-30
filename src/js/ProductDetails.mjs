@@ -32,20 +32,30 @@ export default class ProductDetails {
 }
 
 function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
-  document.querySelector("#p-brand").textContent = product.Brand.Name;
-  document.querySelector("#p-name").textContent = product.NameWithoutBrand;
+  // Set category based on the product type or use a default
+  const category = "Tents"; // Default category, could be determined from product data
+  document.querySelector("h2").textContent = category;
+  
+  document.querySelector("#p-brand").textContent = product.Brand?.Name || "Unknown Brand";
+  document.querySelector("#p-name").textContent = product.NameWithoutBrand || product.Name;
 
   const productImage = document.querySelector("#p-image");
-  productImage.src = product.Images.PrimaryExtraLarge;
-  productImage.alt = product.NameWithoutBrand;
+  productImage.src = product.Image || product.Images?.PrimaryExtraLarge || "/images/default.jpg";
+  productImage.alt = product.NameWithoutBrand || product.Name;
+  
   const euroPrice = new Intl.NumberFormat('de-DE',
     {
       style: 'currency', currency: 'EUR',
-    }).format(Number(product.FinalPrice) * 0.85);
+    }).format(Number(product.FinalPrice || product.ListPrice) * 0.85);
   document.querySelector("#p-price").textContent = `${euroPrice}`;
-  document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
-  document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
+  
+  // Handle colors safely
+  const colorText = product.Colors && product.Colors.length > 0 
+    ? product.Colors[0].ColorName 
+    : "Color not specified";
+  document.querySelector("#p-color").textContent = colorText;
+  
+  document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple || "No description available";
 
   document.querySelector("#add-to-cart").dataset.id = product.Id;
 }

@@ -5,7 +5,7 @@ import ProductList from "./ProductList.mjs";
 loadHeaderFooter();
 
 const category = getParam("category");
-const dataSource = new ExternalServices();
+const dataSource = new ExternalServices(true); // Enable mock mode
 const element = document.querySelector(".product-list");
 const listing = new ProductList(category, dataSource, element);
 
