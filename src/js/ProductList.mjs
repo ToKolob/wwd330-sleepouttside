@@ -9,6 +9,12 @@ function productCardTemplate(product) {
   return `
     <li class="product-card">
       <a href="/product_pages/index.html?product=${product.Id}">
+
+        <img src="${product.Image || product.Images?.PrimaryMedium || '/images/default.jpg'}" alt="${product.Name}">
+        <h3>${product.Brand?.Name || 'Unknown Brand'}</h3>
+        <p>${product.NameWithoutBrand || product.Name}</p>
+        <p class="product-card__price">$${product.FinalPrice || product.ListPrice}</p>
+
         <img src="${product.Images?.PrimaryMedium || '/images/default.jpg'}" alt="Image of ${product.Name}" />
         <h3 class="card__brand">${product.Brand?.Name || 'Unknown Brand'}</h3>
         <h2 class="card__name">${product.Name}</h2>
@@ -18,6 +24,7 @@ function productCardTemplate(product) {
           <input type="number" min="1" value="1" data-id="${product.Id}" class="quantity-selector" />
         </label>
         <button class="add-to-cart" data-id="${product.Id}">Add to Cart</button>
+
       </a>
     </li>
   `;

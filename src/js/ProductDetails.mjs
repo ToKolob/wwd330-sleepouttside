@@ -28,16 +28,22 @@ export default class ProductDetails {
 }
 
 function productDetailsTemplate(product) {
+
+  // Set category based on the product type or use a default
+  const category = "Tents"; // Default category, could be determined from product data
+  document.querySelector("h2").textContent = category;
+  
   // Category as heading
   document.querySelector("h2").textContent =
     product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
 
   // Brand and name
   document.querySelector("#p-brand").textContent = product.Brand.Name;
-  document.querySelector("#p-name").textContent = product.NameWithoutBrand;
+  document.querySelector("#p-name").textContent = product.NameWithout
 
   // Image
   const productImage = document.querySelector("#p-image");
+
   productImage.src = product.Images.PrimaryExtraLarge || "/images/default.jpg";
   productImage.alt = product.NameWithoutBrand;
 
@@ -51,6 +57,7 @@ function productDetailsTemplate(product) {
   // Color & description
   document.querySelector("#p-color").textContent = product.Colors?.[0]?.ColorName || "N/A";
   document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
+
 
   // Button setup
   const addButton = document.querySelector("#add-to-cart");
